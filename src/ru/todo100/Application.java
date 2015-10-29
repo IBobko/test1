@@ -29,7 +29,6 @@ public class Application {
 		}
 		
 		final long end = System.currentTimeMillis();
-		System.out.println("Total time: " + (end - start));	
-
+		System.out.println("Total time: " + (end - start));
 	}
 }
