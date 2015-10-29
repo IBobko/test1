@@ -17,6 +17,17 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
+class M {
+	int id;
+	Date start;
+	Date end;
+}
+
+class Entry extends MethodNameData {
+	HashMap<Integer,M> d = new HashMap<>();
+}
+
+
 
 
 public class AnalizeLogImpl implements AnalizeLog {
@@ -73,6 +84,10 @@ public class AnalizeLogImpl implements AnalizeLog {
 	public Map<String,List<LogEntryData>> collectMethods() throws IOException {
 		final Map<String,List<LogEntryData>> result = new HashMap<>();
 
+		
+		
+		
+		
 		final BufferedReader br = new BufferedReader(new FileReader(file));
 		try {
 		    String line = br.readLine();
@@ -110,14 +125,14 @@ public class AnalizeLogImpl implements AnalizeLog {
 			return null;
 		}
 		
-		final Map<Integer, MethodCallData> linkedHashMap = new LinkedHashMap<Integer, MethodCallData>();
+		final Map<Integer, MethodCallingData> linkedHashMap = new LinkedHashMap<Integer, MethodCallingData>();
 		for (LogEntryData entry: entries) {
 			if (!linkedHashMap.containsKey(entry.getId())) {
 				if (!entry.getIo().equals("entry")) {
 					System.out.println("No entry of method");
 					continue;
 				}
-				MethodCallData methodCalling = new MethodCallData();
+				MethodCallingData methodCalling = new MethodCallingData();
 				methodCalling.setClassName(entry.getClassName());
 				methodCalling.setId(entry.getId());
 				methodCalling.setMethodName(entry.getMethodName());
@@ -134,10 +149,10 @@ public class AnalizeLogImpl implements AnalizeLog {
 		return genarateMethodData(linkedHashMap);
 	}
 	
-	private MethodData genarateMethodData(Map<Integer, MethodCallData> entries) {
+	private MethodData genarateMethodData(Map<Integer, MethodCallingData> entries) {
 		final ArrayList<Long> times = new ArrayList<>();
 		int maxId =  entries.entrySet().iterator().next().getKey();
-		for (Map.Entry<Integer, MethodCallData> e: entries.entrySet()) {
+		for (Map.Entry<Integer, MethodCallingData> e: entries.entrySet()) {
 			final Long time = e.getValue().getFullTime();
 			if (time != null) {
 				if (maxId < e.getKey()) {
@@ -147,7 +162,7 @@ public class AnalizeLogImpl implements AnalizeLog {
 			}
 		}
 		
-		MethodCallData entry = entries.entrySet().iterator().next().getValue();
+		MethodCallingData entry = entries.entrySet().iterator().next().getValue();
 		
 		Long min = Collections.min(times);
 		Long max = Collections.max(times);
