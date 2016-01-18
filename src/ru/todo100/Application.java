@@ -1,7 +1,9 @@
 package ru.todo100;
 
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 public class Application {
@@ -11,18 +13,18 @@ public class Application {
 			return;
 		}
 		final String logFile = args[0];
-		{
-			final File f = new File(logFile);
-			if (!f.exists()) {
-				System.out.println("Log file is not exists.");
-				return;
-			}
+
+		final Path path = Paths.get(logFile);
+
+		if (Files.notExists(path)) {
+			System.out.println("Log file is not exists.");
+			return;
 		}
-		
+
 		final long start = System.currentTimeMillis();
-		
-		final AnalizeLog analize = new AnalizeLogImpl(logFile);
-		final List<MethodData> calculatedInfo = analize.process();
+
+		final AnalyzeLog analyze = new AnalyzeLogImpl(path);
+		final List<MethodData> calculatedInfo = analyze.process();
 
 		for (final MethodData data: calculatedInfo) {
 			System.out.println(data.getClassName() + ":" + data.getMethodName() + " min " + data.getMinTime() + ", max " +data.getMaxTime() +  ", avg " + data.getAvgTime() + ", max id " + data.getMaxId() + ", count " + data.getCountOfCalling());	
