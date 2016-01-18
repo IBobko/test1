@@ -13,7 +13,6 @@ public class Application {
 			return;
 		}
 		final String logFile = args[0];
-
 		final Path path = Paths.get(logFile);
 
 		if (Files.notExists(path)) {

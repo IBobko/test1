@@ -122,6 +122,4 @@ public class AnalyzeLogImpl implements AnalyzeLog {
 		}
 		return entry;
 	}
-	
-
 }
